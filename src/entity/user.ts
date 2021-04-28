@@ -5,13 +5,14 @@
  * @Last Modified time: 2021-04-25 11:04:41
  * 用户表, 存储用户名等信息
  */
-import { Column,  Index, PrimaryColumn } from "typeorm";
+import { Column,  Index, PrimaryColumn, Generated } from "typeorm";
 import { EntityModel } from '@midwayjs/orm';
 
 @EntityModel('user')
 export class User{
     @PrimaryColumn()
-    id: number
+    @Generated('uuid')
+    id: string
 
     @Column({ comment: '创建时间' })
     createTime: string;

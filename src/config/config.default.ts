@@ -17,6 +17,13 @@ export default (appInfo: EggAppInfo) => {
     replaceEggLogger: true,
   };
 
+  // 关闭安全校验
+   config.security = {
+    csrf: {
+      enable: false,
+    }
+  }
+
   config.orm = {
     type: 'mysql',
     host: '127.0.0.1',
@@ -24,7 +31,7 @@ export default (appInfo: EggAppInfo) => {
     username: 'root',
     password: '123456',
     database: 'backend',
-    synchronize: false,
+    synchronize: true,
     logging: false,
   }
 
