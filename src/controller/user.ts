@@ -7,8 +7,9 @@ import {
   Post,
   Body,
   ALL,
-  Plugin,
+  Plugin
 } from "@midwayjs/decorator";
+import { Context } from 'egg';
 import { CreateApiDoc } from '@midwayjs/swagger'
 import { UserService } from '../service/user';
 @Provide()
@@ -19,14 +20,24 @@ export class UserController {
 
   @Inject()
   userService: UserService;
+  ctx: Context;
 
   @CreateApiDoc()
   .description('获取所有用户信息')
   .build()
   @Get('/getAllUsers')
-  async getAllUsers() {
-    const data = await this.userService.findAllUsers();
-    return {code: 0, message: '查询成功', data: data};
+  async getAllUsers(ctx) {
+    try {
+      console.log(ctx.state.user)
+      const data = await this.userService.findAllUsers();
+      return {
+        code: 0,
+        message: '查询成功',
+        data: data
+      };
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   @CreateApiDoc()
@@ -40,7 +51,11 @@ export class UserController {
   @Get('/getUserDetail')
   async getUserByInfo(@Query() id: string) {
     const data = await this.userService.getUserDetail(id);
-    return {code: 0, message: '查询成功', data: data};
+    return {
+      code: 0,
+      message: '查询成功',
+      data: data
+    };
   }
 
   @CreateApiDoc()
@@ -49,7 +64,11 @@ export class UserController {
   @Post('/updateUser')
   async updateUser(@Body(ALL) params: object) {
     const data = await this.userService.updateUser(params);
-    return {code: 0, message: '更新成功', data: data};
+    return {
+      code: 0,
+      message: '更新成功',
+      data: data
+    };
   }
 
   @CreateApiDoc()
@@ -58,7 +77,11 @@ export class UserController {
   @Post('/deleteUser')
   async deleteUser(@Body() id: string) {
     const data = await this.userService.deleteUser(id);
-    return {code: 0, message: '删除成功', data: data};
+    return {
+      code: 0,
+      message: '删除成功',
+      data: data
+    };
   }
 
   @CreateApiDoc()
@@ -67,7 +90,11 @@ export class UserController {
   @Post('/addNewUser')
   async addNewUser(@Body(ALL) params: any) {
     const data = await this.userService.addNewUser(params);
-    return {code: 0, message: '新增成功', data: data};
+    return {
+      code: 0,
+      message: '新增成功',
+      data: data
+    };
   }
 
   @CreateApiDoc()
@@ -77,7 +104,7 @@ export class UserController {
   async login(@Body(ALL) params: any) {
     const data = await this.userService.login(params);
     if (data) {
-      let token = this.jwt.sign({ name: 'tony' })
+      let token = this.jwt.sign({ name: 'backend' })
       delete data.password
       return {
         code: 0,

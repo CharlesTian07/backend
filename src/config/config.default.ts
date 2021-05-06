@@ -18,7 +18,7 @@ export default (appInfo: EggAppInfo) => {
     replaceEggLogger: true,
   };
 
-  // 关闭安全校验
+  // 关闭安全校验(开启跨域访问)
    config.security = {
     csrf: {
       enable: false,
