@@ -1,4 +1,5 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg';
+import { IApplicationLocals } from '../../typings/app';
 
 export type DefaultConfig = PowerPartial<EggAppConfig>;
 
@@ -22,6 +23,16 @@ export default (appInfo: EggAppInfo) => {
     csrf: {
       enable: false,
     }
+  }
+
+  // token校验机制(ignore中部分路径忽略token校验)
+  config.jwt = {
+    enable: true,
+    secret: 'backend',
+    ignore: [
+      (ctx: IApplicationLocals) => ctx.path === '/',
+      '/user/login',
+    ]
   }
 
   config.orm = {

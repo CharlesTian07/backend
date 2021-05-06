@@ -6,14 +6,16 @@ import {
   Query,
   Post,
   Body,
-  ALL
+  ALL,
+  Plugin,
 } from "@midwayjs/decorator";
 import { CreateApiDoc } from '@midwayjs/swagger'
 import { UserService } from '../service/user';
-
 @Provide()
 @Controller('/user')
 export class UserController {
+  @Plugin()
+  jwt;
 
   @Inject()
   userService: UserService;
@@ -75,11 +77,15 @@ export class UserController {
   async login(@Body(ALL) params: any) {
     const data = await this.userService.login(params);
     if (data) {
+      let token = this.jwt.sign({ name: 'tony' })
       delete data.password
       return {
         code: 0,
         message: '登录成功',
-        data: data
+        data: {
+          ...data,
+          token
+        }
       }
     }
     return {
@@ -105,5 +111,4 @@ export class UserController {
       message: '账号或旧密码有误，请核对后输入'
     }
   }
-
 }
